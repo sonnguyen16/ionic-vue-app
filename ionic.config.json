@@ -1,0 +1,7 @@
+{
+  "name": "quan-ly-chung-cu-remake",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite"
+}
