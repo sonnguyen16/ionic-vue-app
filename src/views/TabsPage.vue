@@ -2,7 +2,7 @@
   <ion-page>
     <ion-tabs>
       <ion-router-outlet></ion-router-outlet>
-      <ion-tab-bar slot="bottom">
+      <ion-tab-bar class="dark:bg-[#09090b] dark:shadow-white-xl" slot="bottom">
         <ion-tab-button tab="home" href="/home">
           <ion-icon aria-hidden="true" :icon="home" />
           <ion-label>Trang chủ</ion-label>
@@ -19,14 +19,14 @@
         </ion-tab-button>
 
         <ion-tab-button tab="dich-vu" href="/dich-vu">
-          <ion-icon aria-hidden="true" :icon="documentText" />
+          <ion-icon aria-hidden="true" :icon="layers" />
           <ion-label>Dịch vụ</ion-label>
         </ion-tab-button>
 
 
-        <ion-tab-button tab="tai-khoan" href="/tai-khoan">
-          <ion-icon aria-hidden="true" :icon="person" />
-          <ion-label>Tài khoản</ion-label>
+        <ion-tab-button tab="phi" href="/phi">
+          <ion-icon aria-hidden="true" :icon="documentText" />
+          <ion-label>Phí</ion-label>
         </ion-tab-button>
       </ion-tab-bar>
     </ion-tabs>
@@ -43,12 +43,17 @@ import {
   IonPage,
   IonRouterOutlet,
 } from "@ionic/vue";
-import {chatbubble, documentText, home, notifications, person} from "ionicons/icons";
+import {chatbubble, documentText, home, layers, notifications} from "ionicons/icons";
 </script>
 
 <style scoped>
 ion-tab-bar {
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
+ion-tab-button {
+  --background: none;
+  --color-selected: rgb(96,165,250);
+}
+
 </style>
 
