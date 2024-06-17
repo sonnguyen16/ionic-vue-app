@@ -8,6 +8,12 @@ export enum UserStatus {
   ChuaKichHoat = 1,
 }
 
+export enum UserPhanLoai {
+  ChuHo = 1,
+  NguoiThue = 2,
+  NguoiCoQuanHeVoiChuHo = 3,
+}
+
 export enum PhanAnhType {
   GopY = 1,
   KhieuNai = 2,
@@ -66,6 +72,12 @@ export const UserStatusText: any = {
   [UserStatus.ChuaKichHoat]: "Chưa kích hoạt",
 };
 
+export const UserPhanLoaiText: any = {
+    [UserPhanLoai.ChuHo]: "Chủ hộ",
+    [UserPhanLoai.NguoiThue]: "Người thuê",
+    [UserPhanLoai.NguoiCoQuanHeVoiChuHo]: "Người có quan hệ với chủ hộ",
+};
+
 export const UserStatusBadgeColor: any = {
   [UserStatus.DangHoatDong]: "success",
   [UserStatus.ChuaKichHoat]: "warning",
@@ -110,6 +122,12 @@ export const JobLevelText: any = {
   [JobLevel.XuLyGap]: "Xử lý gấp",
   [JobLevel.BinhThuong]: "Bình thường",
 };
+
+export const JobStatusText: any = {
+    [JobStatus.ChuaXuLy]: "Chưa xử lý",
+    [JobStatus.DangXuLy]: "Đang xử lý",
+    [JobStatus.DaXuLy]: "Đã xử lý",
+}
 
 export const JobLevelBadgeColor: any = {
   [JobLevel.XuLyGap]: "danger",

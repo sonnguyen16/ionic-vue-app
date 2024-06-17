@@ -2,8 +2,11 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'io.ionic.starter',
-  appName: 'quan-ly-chung-cu-remake',
-  webDir: 'dist'
+  appName: 'Quản lý chung cư',
+  webDir: 'dist',
+  server: {
+    androidScheme: "http",
+  },
 };
 
 export default config;

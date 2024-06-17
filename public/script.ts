@@ -17,4 +17,13 @@ const showTabBar = (): void => {
     }
 }
 
-export { hideTabBar, showTabBar };
+function formatCurrency(number: number, locale = 'vi-VN', currency = 'VND') {
+    return new Intl.NumberFormat(locale, {
+        style: 'currency',
+        currency: currency,
+    }).format(number);
+}
+
+
+
+export { hideTabBar, showTabBar, formatCurrency };

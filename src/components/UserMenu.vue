@@ -6,6 +6,10 @@ import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
+async function logout() {
+ window.location.href = '/dang-nhap'
+}
+
 </script>
 
 <template>
@@ -22,7 +26,7 @@ const router = useRouter()
       <DropdownMenuItem @click.prevent="router.push('/doi-mat-khau')">
         Đổi mật khẩu
       </DropdownMenuItem>
-      <DropdownMenuItem @click.prevent="router.push('/dang-xuat')">
+      <DropdownMenuItem @click.prevent="logout">
         Đăng xuất
       </DropdownMenuItem>
     </DropdownMenuContent>

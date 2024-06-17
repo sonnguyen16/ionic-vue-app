@@ -5,70 +5,84 @@
     <!--          Thông báo-->
     <Carousel class="relative w-full">
       <CarouselContent>
-        <CarouselItem v-for="(_, index) in 3" :key="index">
-          <ThongBao :tb="thong_bao[index]" :index="-1"/>
+        <CarouselItem v-for="(_, index) in thong_bao.data.length > 3 ? 3 : thong_bao.data.length" :key="index">
+          <ThongBao @show-detail="showDetailThongBao" :tb="thong_bao.data[index]" :index="-1"/>
         </CarouselItem>
       </CarouselContent>
     </Carousel>
     <!--          Thông báo-->
     <!--          Dịch vụ-->
-    <HeaderSection title="Dịch vụ hot" link="/dich-vu" />
-    <div class="flex gap-3">
-      <Carousel class="relative w-full">
-        <CarouselContent>
-          <CarouselItem v-for="(_,index) in dich_vu" :key="index" class="basis-1/2">
-            <DichVu :dv="dich_vu[index]" />
-          </CarouselItem>
-        </CarouselContent>
-      </Carousel>
-    </div>
+    <section v-if="role == 2" id="dich_vu">
+      <HeaderSection title="Dịch vụ hot" link="/dich-vu" />
+      <div class="flex gap-3">
+        <Carousel class="relative w-full">
+          <CarouselContent>
+            <CarouselItem v-for="(_,index) in 4" :key="index" class="basis-1/2">
+              <DichVu @show-detail="showDetailDichVu"  :dv="dich_vu.data[index]" />
+            </CarouselItem>
+          </CarouselContent>
+        </Carousel>
+      </div>
+    </section>
     <!--          Dịch vụ-->
     <!--          Phản ánh-->
     <HeaderSection title="Phản ánh của bạn" link="/phan-anh" />
     <Carousel class="relative w-full">
       <CarouselContent>
-        <CarouselItem v-for="(_, index) in 3" :key="index">
-          <PhanAnh :pa="phan_anh[index]"/>
+        <CarouselItem v-for="(pa, index) in phan_anh" :key="index">
+          <PhanAnh @show-detail="showDetailPhanAnh" :pa="pa"/>
+        </CarouselItem>
+      </CarouselContent>
+    </Carousel>
+    <!--          Phản ánh-->
+    <!--          Phản ánh-->
+    <HeaderSection v-if="role == 1" title="Công việc của bạn" link="/cong-viec" />
+    <Carousel class="relative w-full">
+      <CarouselContent>
+        <CarouselItem v-for="(cv, index) in cong_viec" :key="index">
+          <CongViec @show-detail="showDetailPhanAnh" :cv="cv"/>
         </CarouselItem>
       </CarouselContent>
     </Carousel>
     <!--          Phản ánh-->
     <!--          Phí chưa thanh toán-->
-    <HeaderSection title="Phí đến hạn" link="/phi" />
-    <Table>
-      <TableHeader>
-        <TableRow class="dark:border-zinc-600">
-          <TableHead class="w-[120px]">
-            <label class="text-[10px]">Tên</label>
-          </TableHead>
-          <TableHead>
-            <label class="text-[10px]">Thời gian</label>
-          </TableHead>
-          <TableHead >
-            <label class="text-[10px]">Tổng tiền</label>
-          </TableHead>
-          <TableHead class="w-[100px] text-right">
-            <label class="text-[10px]">Trạng thái</label>
-          </TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        <TableRow class="dark:border-zinc-700 " v-for="item in phi" :key="item.name">
-          <TableCell >
-            <label class="dark:text-zinc-200 font-bold text-[10px]" >{{ item.name }}</label>
-          </TableCell>
-          <TableCell>
-            <label class="dark:text-zinc-200 text-[10px]">{{ item.time }}</label>
-          </TableCell>
-          <TableCell>
-            <label class="dark:text-zinc-200 text-[10px]">{{ item.total }}</label>
-          </TableCell>
-          <TableCell class="text-right">
-            <Badge class="bg-red-500 w-[100px] flex justify-center text-[10px] p-[1px]">Chưa thanh toán</Badge>
-          </TableCell>
-        </TableRow>
-      </TableBody>
-    </Table>
+    <section v-if="role == 2" id="phi_dich_vu">
+      <HeaderSection title="Phí đến hạn" link="/phi" />
+      <Table>
+        <TableHeader>
+          <TableRow class="dark:border-zinc-600">
+            <TableHead class="w-[120px]">
+              <label class="text-[10px]">Tên</label>
+            </TableHead>
+            <TableHead>
+              <label class="text-[10px]">Thời gian</label>
+            </TableHead>
+            <TableHead >
+              <label class="text-[10px]">Tổng tiền</label>
+            </TableHead>
+            <TableHead class="w-[100px] text-right">
+              <label class="text-[10px]">Trạng thái</label>
+            </TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow class="dark:border-zinc-700 " v-for="item in phi" :key="item.id">
+            <TableCell >
+              <label class="dark:text-zinc-200 font-bold text-[10px]" >{{ item.ten }}</label>
+            </TableCell>
+            <TableCell>
+              <label class="dark:text-zinc-200 text-[10px]">{{ new Date(item.created_at).toLocaleDateString() }}</label>
+            </TableCell>
+            <TableCell>
+              <label class="dark:text-zinc-200 text-[10px]">{{ formatCurrency(item.gia) }}</label>
+            </TableCell>
+            <TableCell class="text-right">
+              <Badge class="bg-red-500 w-[100px] flex justify-center text-[10px] p-[1px]">Chưa thanh toán</Badge>
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </section>
     <!--          Phí chưa thanh toán-->
   </Container>
 </template>
@@ -87,74 +101,39 @@ import HeaderSection from "@/components/HeaderSection.vue";
 import PhanAnh from "@/components/PhanAnh.vue";
 import DichVu from "@/components/DichVu.vue";
 import {Badge} from "@/components/ui/badge";
+import {useThongBaoStore} from "@/stores/thongbao";
+import {useDichVuStore} from "@/stores/phidichvu";
+import {useRouter} from "vue-router";
+import {useUserStore} from "@/stores/user";
+import {ref} from "vue";
+import CongViec from "@/components/CongViec.vue";
+import {formatCurrency} from "../../public/script";
 
-const phi:any = [
-  {
-    name: 'Phí tháng 5',
-    time: '20/5/2022',
-    total: '1.000.000đ'
-  },
-  {
-    name: 'Phí tháng 4',
-    time: '20/4/2022',
-    total: '1.000.000đ'
-  },
-  {
-    name: 'Phí tháng 3',
-    time: '20/3/2022',
-    total: '1.000.000đ'
-  },
-];
+const router = useRouter();
 
-const thong_bao:any[] = [
-  {
-    title: "Thu phí tháng 5",
-    content: "Hệ thống sẽ thu phí tháng 5 vào ngày 20/5/2022, quý khách vui lòng đóng phí...",
-    type: "Thông báo chung",
-    viewed: true
-  },
-  {
-    title: "Thông báo cúp điện",
-    content: "Tòa nhà sẽ cúp điện vào ngày 20/6/2022, quý khách vui lòng sắp xếp công việc...",
-    type: "Thông báo bảo trì",
-    viewed: true
-  },
-  {
-    title: "Thông báo nghỉ lễ",
-    content: "Tòa nhà sẽ nghỉ lễ vào ngày 2/9/2022, quý khách vui lòng sắp xếp công việc...",
-    type: "Thông báo chung",
-    viewed: true
-  }
-]
+const userStore = useUserStore();
+const thongBaoStore = useThongBaoStore();
+const dichVuStore = useDichVuStore();
 
-const phan_anh:any [] = [
-  {
-    tieu_de: "Góp ý về dịch vụ",
-    noi_dung: "Dịch vụ bể bơi của tòa nhà rất tốt, nhưng mong muốn tăng cường vệ sinh hơn",
-    phan_loai: "Góp ý"
-  },
-  {
-    tieu_de: "Báo cáo sự cố",
-    noi_dung: "Hệ thống cửa ra vào tòa nhà bị hỏng, mong muốn sửa chữa sớm",
-    phan_loai: "Sự cố"
-  },
-  {
-    tieu_de: "Góp ý về dịch vụ",
-    noi_dung: "Dịch vụ bể bơi của tòa nhà rất tốt, nhưng mong muốn tăng cường vệ sinh hơn",
-    phan_loai: "Góp ý"
-  }
-]
+const role = userStore.role;
 
-const dich_vu:any [] = [
-  {
-    ten: "Bể bơi",
-    gia: "Miễn phí",
-    hinh_anh: "/pool.jpg",
-  },
-  {
-    ten: "Sân golf",
-    gia: "100.000đ",
-    hinh_anh: "/golf.png",
-  },
-]
+const thong_bao = ref(thongBaoStore.thong_bao);
+const dich_vu = ref(dichVuStore.dich_vu);
+const phan_anh = ref(userStore.phan_anh);
+const cong_viec = ref(userStore.cong_viec);
+const phi = ref(userStore.phi);
+function showDetailThongBao(id: string) {
+  router.push(`/thong-bao/${id}`);
+}
+
+function showDetailPhanAnh(id: string) {
+  router.push(`/phan-anh/${id}`);
+}
+
+function showDetailDichVu(id: string) {
+  router.push(`/dich-vu/${id}`);
+}
+
+
+
 </script>

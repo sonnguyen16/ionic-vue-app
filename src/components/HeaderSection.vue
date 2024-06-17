@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import {useRouter} from "vue-router";
+
+const router = useRouter()
 
 defineProps({
   title: {
@@ -16,7 +19,7 @@ defineProps({
 <template>
   <div class="flex justify-between items-center mt-3">
     <h1 class="text-lg font-bold mt-2 dark:text-zinc-200">{{ title }}</h1>
-    <a :href="link" class="block">
+    <a @click.prevent="router.push(link)" class="block">
       Xem tất cả
     </a>
   </div>

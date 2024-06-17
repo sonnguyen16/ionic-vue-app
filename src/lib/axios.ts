@@ -17,6 +17,7 @@ class AxiosService {
     return response.data;
   }
 
+
   public static async post(
     url: string,
     data?: any,

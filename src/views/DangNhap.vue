@@ -1,16 +1,27 @@
 <script setup lang="ts">
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
+import { Loader2 } from 'lucide-vue-next';
 import { useRouter } from 'vue-router';
 import { ref } from 'vue';
-import AxiosService from "@/lib/axios";
 import {useToast} from "@/components/ui/toast";
 import storage from "@/lib/storage";
-import { Loader2 } from 'lucide-vue-next';
+import { useUserStore } from "@/stores/user";
+import { useThongBaoStore } from "@/stores/thongbao";
+import { useDichVuStore } from "@/stores/phidichvu";
+import { useCanHoStore } from "@/stores/canho";
 
 const router = useRouter();
+
 const { toast } = useToast();
+
 const loading = ref(false);
+
+const userStore = useUserStore();
+const thongBaoStore = useThongBaoStore();
+const dichVuStore = useDichVuStore();
+const canHoStore = useCanHoStore();
+
 const body = ref({
   email: '',
   password: ''
@@ -18,18 +29,44 @@ const body = ref({
 
 async function submit() {
   loading.value = true;
-  const res = await AxiosService.post('/login', body.value);
-  loading.value = false;
-  if(res.token){
-    const db = await storage.create();
-    await db.set("@token", res.token);
-    await router.push('/home');
-  }else{
+  try {
+    const res = await userStore.login(body.value);
+
+    if(res.token){
+      const db = await storage.create();
+      await db.set("@token", res.token);
+      await userStore.getProfile();
+      const { role } = userStore;
+      if(role === 1){
+        await Promise.all([
+          thongBaoStore.getThongBao(),
+          userStore.getPhanAnhBQL(),
+          canHoStore.getCanHo()
+        ])
+        await router.push('/home');
+        return;
+      }
+      await Promise.all([
+        thongBaoStore.getThongBao(),
+        dichVuStore.getDichVu(userStore.du_an_id),
+        userStore.getPhi(),
+      ])
+      await router.push('/home');
+    }else{
+      toast({
+        title: 'Đăng nhập thất bại',
+        description: res.message,
+        variant: 'destructive'
+      })
+    }
+  }catch (e: any) {
     toast({
       title: 'Đăng nhập thất bại',
-      description: res.message,
+      description: e.toString(),
       variant: 'destructive'
     })
+  }finally {
+    loading.value = false;
   }
 }
 

@@ -15,6 +15,8 @@ defineProps({
   }
 })
 
+const emit = defineEmits(['select'])
+
 </script>
 
 <template>
@@ -26,7 +28,7 @@ defineProps({
     </DropdownMenuTrigger>
     <DropdownMenuContent align="end">
       <template v-for="(option, index) in options" :key="index">
-        <DropdownMenuItem class="flex justify-between">
+        <DropdownMenuItem @click="emit('select', index)" class="flex justify-between">
           {{ option.label }} <Icon v-if="option.checked" icon="radix-icons:check" class="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:text-white " />
         </DropdownMenuItem>
       </template>
